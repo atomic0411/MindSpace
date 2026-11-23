@@ -26,6 +26,10 @@ The client uses the same-origin `/api` path. `client/public/_redirects` proxies 
 
 Set `MONGODB_URI`, `GEMINI_API_KEY`, `GEMINI_MODEL`, `NODE_ENV=production` and `CLIENT_ORIGIN` in the backend host's environment/secret settings. Do not put backend credentials in Netlify or commit them to `.env.example`. For local development, use an ignored `server/.env` file and keep `.env.example` limited to placeholders.
 
+### Vercel + Render deployment
+
+Vercel does not process Netlify's `_redirects` file. The root `vercel.json` contains the API proxy rewrite and SPA fallback. Configure the Vercel project with the repository root as its Root Directory, build command `npm run build -w client`, and output directory `client/dist`. Set Render's `CLIENT_ORIGIN` to the exact Vercel origin, with no trailing slash.
+
 ## Security model
 
 - Journal plaintext is encrypted in the browser with AES-256-GCM.

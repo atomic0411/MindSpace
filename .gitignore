@@ -1,0 +1,10 @@
+node_modules/
+dist/
+.env
+.env.local
+*.log
+coverage/
+.DS_Store
+AGENTS.md
+IMPLEMENTATION_PLAN.md
+Mindspace_Product_Requirements_and_Agent_Specification.docx

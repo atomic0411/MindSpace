@@ -1,12 +1,12 @@
 import { Router } from 'express';
 import { z } from 'zod';
-import { GroqProvider } from '../services/ai/GroqProvider.js';
+import { GeminiProvider } from '../services/ai/GeminiProvider.js';
 import { MockProvider } from '../services/ai/MockProvider.js';
 import { assessCrisis, crisisResponse } from '../services/ai/safety.js';
 
 const router = Router();
-const provider = process.env.GROQ_API_KEY
-  ? new GroqProvider({ apiKey: process.env.GROQ_API_KEY, model: process.env.GROQ_MODEL })
+const provider = process.env.GEMINI_API_KEY
+  ? new GeminiProvider({ apiKey: process.env.GEMINI_API_KEY, model: process.env.GEMINI_MODEL })
   : new MockProvider();
 
 router.post('/chat', async (req, res, next) => {
@@ -30,7 +30,7 @@ router.post('/chat', async (req, res, next) => {
     } catch (error) {
       return res.status(503).json({ success: false, error: { code: 'AI_UNAVAILABLE', message: 'The AI companion is unavailable. You can still journal, track moods and use mindfulness tools.' } });
     }
-    res.json({ success: true, data: { response, safety: 'general', provider: process.env.GROQ_API_KEY ? 'groq' : 'mock' } });
+    res.json({ success: true, data: { response, safety: 'general', provider: process.env.GEMINI_API_KEY ? 'gemini' : 'mock' } });
   } catch (error) { next(error); }
 });
 

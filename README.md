@@ -8,7 +8,7 @@ Mindspace is a private, calm mental-wellness platform built from the Product and
 
 - Node.js 24+
 - MongoDB Atlas or a local MongoDB-compatible test database
-- Optional Groq API credentials
+- Optional Google Gemini API credentials
 
 ## Setup
 
@@ -19,6 +19,12 @@ npm run dev
 ```
 
 The client runs on Vite and the API runs on Express. Production settings require HTTPS and a trusted CORS origin.
+
+### Netlify + Render deployment
+
+The client uses the same-origin `/api` path. `client/public/_redirects` proxies API requests to Render and includes the SPA fallback. Replace `YOUR-RENDER-SERVICE` with the deployed Render service hostname before deploying. Set `CLIENT_ORIGIN` on the backend to the exact Netlify site origin.
+
+Set `MONGODB_URI`, `GEMINI_API_KEY`, `GEMINI_MODEL`, `NODE_ENV=production` and `CLIENT_ORIGIN` in the backend host's environment/secret settings. Do not put backend credentials in Netlify or commit them to `.env.example`. For local development, use an ignored `server/.env` file and keep `.env.example` limited to placeholders.
 
 ## Security model
 
@@ -55,8 +61,8 @@ All mutating API routes require an authenticated session and CSRF token. User ow
 - Journal and mood free-text ciphertext is stored only after browser encryption.
 - The server never receives or stores the encryption passphrase or unwrapped DEK.
 - Losing the encryption passphrase can make encrypted data permanently unrecoverable.
-- AI chat is not persisted. Groq credentials are server-only. `MockProvider` is used locally when no key is configured.
-- Groq is an external processor for explicitly shared chat text. This implementation does not claim verified provider retention settings.
+- AI chat is not persisted. Gemini credentials are server-only. `MockProvider` is used locally when no key is configured.
+- Gemini is an external processor for chat text and any journal text the user explicitly selects and consents to share. Review Google's current terms and data controls before launch; this implementation does not claim verified provider retention settings.
 - Password reset delivery requires a mail provider adapter before public launch.
 - MongoDB Atlas is production storage; the test suite uses `mongodb-memory-server`.
 - Account deletion purges owned application records immediately. Documented backup retention is up to 30 days.

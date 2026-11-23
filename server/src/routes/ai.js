@@ -28,6 +28,12 @@ router.post('/chat', async (req, res, next) => {
     try {
       response = await provider.chat(parsed.data);
     } catch (error) {
+      console.error('AI provider request failed', {
+        provider: process.env.GEMINI_API_KEY ? 'gemini' : 'mock',
+        errorName: error?.name || 'Error',
+        errorCode: error?.code ?? null,
+        errorStatus: error?.status ?? null
+      });
       return res.status(503).json({ success: false, error: { code: 'AI_UNAVAILABLE', message: 'The AI companion is unavailable. You can still journal, track moods and use mindfulness tools.' } });
     }
     res.json({ success: true, data: { response, safety: 'general', provider: process.env.GEMINI_API_KEY ? 'gemini' : 'mock' } });
